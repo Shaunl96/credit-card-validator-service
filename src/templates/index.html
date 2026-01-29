@@ -1,13 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Credit Card Validator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Credit Card Validator</h1>
-    <form action="/validate" method="get">
-        <input type="text" name="cardNumber" placeholder="Enter card number" required>
-        <button type="submit">Validate</button>
-    </form>
+    <div class="container">
+        <h1>Credit Card Validator</h1>
+
+        <form method="post">
+            <input
+                type="text"
+                name="card_number"
+                placeholder="Enter credit card number"
+                required
+            >
+            <button type="submit">Validate</button>
+        </form>
+
+        {% if result %}
+            <div class="result {{ 'valid' if result == 'Valid' else 'invalid' }}">
+                {{ result }}
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>

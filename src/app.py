@@ -1,20 +1,18 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
 from validator import is_valid_credit_card
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+@app.route("/", methods=["GET", "POST"])
+def index():
+    result = None
 
-@app.route("/validate")
-def validate():
-    card_number = request.args.get("cardNumber", "")
-    if not card_number.isdigit():
-        return {"error": "Invalid input"}, 400
+    if request.method == "POST":
+        card_number = request.form.get("card_number")
+        if card_number:
+            result = "Valid" if is_valid_credit_card(card_number) else "Invalid"
 
-    result = is_valid_credit_card(card_number)
-    return {"cardNumber": card_number, "valid": result}
+    return render_template("index.html", result=result)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)

@@ -123,7 +123,7 @@ Git
 
 1. Clone the repository:
 ```
-git clone https://github.com/<your-username>/credit-card-validator-service.git
+git clone https://github.com/Shaunl96/credit-card-validator-service.git
 
 cd credit-card-validator-service
 ```
@@ -207,21 +207,28 @@ http://credit-card-validator-alb-1135004809.eu-north-1.elb.amazonaws.com
 # Repository Structure
 ```
 credit-card-validator-service/
-├── app.py
-├── validator.py
-├── requirements.txt
-├── Dockerfile
-├── README.md
+├── src/
+│   └── __init__.py
+│   └── app.py
+│   └── validator.py
+│   └── static/
+│      └── styles.css
+│   └── templates/
+│      └── index.html
 │
 ├── templates/
 │   └── index.html
 │
 ├── tests/
+│   └── __init__.py
 │   └── test_validator.py
 │
-└── .github/
-    └── workflows/
-        └── ci.yml
+├── .github/
+│      └── workflows/
+│         └── ci.yml
+├── requirements.txt
+├── Dockerfile
+├── README.md
         
 ```
         
@@ -249,4 +256,4 @@ credit-card-validator-service/
 
 Author
 
-Shaun Lamprecht
+**Shaun Lamprecht**

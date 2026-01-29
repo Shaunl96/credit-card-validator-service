@@ -1,23 +1,63 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  IMAGE_TAG: latest
 
 jobs:
-  build-test:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Run tests
-        run: pytest
+    - name: Run tests
+      run: |
+        pytest
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build Docker image
+      run: |
+        docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+
+    - name: Tag Docker image
+      run: |
+        docker tag $ECR_REPOSITORY:$IMAGE_TAG \
+        ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+    - name: Push Docker image to ECR
+      run: |
+        docker push \
+        ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+    - name: Deploy to ECS
+      run: |
+        aws ecs update-service \
+          --cluster credit-card-validator-cluster \
+          --service credit-card-validator-service \
+          --force-new-deployment

@@ -58,6 +58,6 @@ jobs:
     - name: Deploy to ECS
       run: |
         aws ecs update-service \
-          --cluster credit-card-validator-cluster \
+          --cluster credit-card-validator-cluster1 \
           --service credit-card-validator-service \
           --force-new-deployment

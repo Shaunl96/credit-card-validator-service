@@ -42,7 +42,7 @@ The application is intentionally kept lightweight and stateless to align with cl
 
 * **Cloud Platform:** AWS
 
-* **Deployment Target:** Container-based service (AWS App Runner / ECS)
+* **Deployment Target:** Container-based service (AWS ECS)
 
 # Application Architecture
 
@@ -123,7 +123,7 @@ Git
 
 1. Clone the repository:
 ```
-git clone https://github.com/<your-username>/credit-card-validator-service.git
+git clone https://github.com/Shaunl96/credit-card-validator-service.git
 
 cd credit-card-validator-service
 ```
@@ -186,7 +186,7 @@ The pipeline ensures that only tested and validated code progresses toward deplo
 
 **Amazon ECR** – Stores Docker images
 
-**AWS App Runner / ECS** – Runs the containerized application
+**AWS ECS** – Runs the containerized application
 
 **AWS IAM** – Manages permissions for deployment
 
@@ -201,27 +201,34 @@ These services were chosen to:
 # Public Application URL
 
 The deployed application can be accessed at:
-```
-https://your-app-name.awsapprunner.com
-```
+
+http://credit-card-validator-alb-1135004809.eu-north-1.elb.amazonaws.com
+
 # Repository Structure
 ```
 credit-card-validator-service/
-├── app.py
-├── validator.py
-├── requirements.txt
-├── Dockerfile
-├── README.md
+├── src/
+│   └── __init__.py
+│   └── app.py
+│   └── validator.py
+│   └── static/
+│      └── styles.css
+│   └── templates/
+│      └── index.html
 │
 ├── templates/
 │   └── index.html
 │
 ├── tests/
+│   └── __init__.py
 │   └── test_validator.py
 │
-└── .github/
-    └── workflows/
-        └── ci.yml
+├── .github/
+│      └── workflows/
+│         └── ci.yml
+├── requirements.txt
+├── Dockerfile
+├── README.md
         
 ```
         
@@ -249,4 +256,4 @@ credit-card-validator-service/
 
 Author
 
-Shaun Lamprecht
+**Shaun Lamprecht**
